@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+  <meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+  <meta content="ru-ru" http-equiv="Content-Language" />
+  <meta name="viewport" content="witdh=device-width, initial-scale=1.0">
+  <title>ЛАБОРАТОРНАЯ РАБОТА. Определение коэффициента теплопроводности металлов</title>
+    <script src="code1.js"></script>
+	<script src="mathutils.js"></script>
+	<link rel="stylesheet" href="pstyles.css">
+		
+</head>
+
+<body bgcolor="#406025" onload="onInit()">
+
+    <h1>
+        ЛАБОРАТОРНАЯ РАБОТА.
+    </h1>
+    <h2>
+        Определение коэффициента теплопроводности металлов
+        методом имитационного моделирования процесса теплообмена
+    </h2>
+    <br/>
+    <h4>СибГУ им. М. Ф. Решетнева, 2025</h4>
+    <h4>Version 1.20250221</h4>
+    <p>
+СВИДЕТЕЛЬСТВО
+о государственной регистрации программы для ЭВМ № 2026610992<br/>
+Комплекс имитационных лабораторных работ по
+дисциплине «Теплопередача в РКТ»
+Правообладатель: Федеральное государственное бюджетное
+образовательное учреждение высшего образования
+«Сибирский государственный университет науки и
+технологий имени академика М.Ф. Решетнева» (RU)
+Авторы: Жуйков Дмитрий Александрович (RU), Черненко
+Валентина Викторовна (RU)
+Заявка № 2026610322
+Дата поступления 16 января 2026 г.
+Дата государственной регистрации
+в Реестре программ для ЭВМ 16 января 2026 г.
+ </p>
+
+    <hr/>
+    <br/>
+    <br/>
+    <P>
+        <b>Цель работы:</b>  определить коэффициент теплопроводности металлического стержня экспериментальным путем.
+    </P>
+    <br/>
+    <br/>
+    <h2>
+        СХЕМА ЛАБОРАТОРНОЙ УСТАНОВКИ:
+    </h2>
+
+    <img src="image.png" width="500" />
+    <hr/>
+    <h3>
+        Исходные данные:
+    </h3>
+
+    <table>
+        <tr>
+            <td colspan="3">
+                <input TYPE="button" VALUE="Новый эксперимент" width="300" height="200" ONCLICK="New()" />
+            </td>
+        </tr>
+
+        <tr>
+            <td>
+                Мощность источника питания, %:
+            </td>
+            <td>
+                <input id="slider_P_g" TYPE="range" VALUE="10" max="100" min="0" oninput="oninputslider_P_g()" />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Сила тока, А:
+            </td>
+            <td>
+                <input id="txtP_g" TYPE="text" VALUE="2" readonly=readonly />
+            </td>
+            <td>
+            </td>
+        </tr>
+        <tr>
+            <td>
+            </td>
+            <td colspan="2">
+                <h3>Текущие показания приборов:</h3>
+                <table>
+                    <tr><td>U_T1 - Напряжение на термопаре 1, мВ</td><td><input id="txtT1" TYPE="text" VALUE="0" readonly style="text-align:right;" size="4" /></td></tr>
+                    <tr><td>U_T2 - Напряжение на термопаре 2, мВ</td><td><input id="txtT2" TYPE="text" VALUE="0" readonly style="text-align:right;" size="4" /></td></tr>
+                    <tr><td>U_T3 - Напряжение на термопаре 3, мВ</td><td><input id="txtT3" TYPE="text" VALUE="0" readonly style="text-align:right;" size="4" /></td></tr>
+                    <tr><td>dU_1-2- Падение напряжения на участке между термопарами 1-2, мВ</td><td><input id="txtT4" TYPE="text" VALUE="0" readonly style="text-align:right;" size="4" /></td></tr>
+                    <tr><td>dU_2-3- Падение напряжения на участке между термопарами 2-3, мВ</td><td><input id="txtT5" TYPE="text" VALUE="0" readonly style="text-align:right;" size="4" /></td></tr>
+                    <tr><td>Uk-- Падение напряжения на образцовом сопротивлении(резисторе), мВ</td><td><input id="txtT6" TYPE="text" VALUE="0" readonly style="text-align:right;" size="4" /></td></tr>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <input TYPE="button" VALUE="ЗАМЕР" width="300" height="200" ONCLICK="Register()" />
+            </td>
+        </tr>
+    </table>
+
+    <hr />
+    <p>
+
+    </p>
+    <P>
+        Результаты замеров для режима:<div id="idInfo"></div>
+    </P>
+    <hr />
+    <div id="id0">Результат:</div>
+</body>
+
+</html>
