@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+  <meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+  <meta content="ru-ru" http-equiv="Content-Language" />
+  <meta name="viewport" content="witdh=device-width, initial-scale=1.0">
+  <title>Исследование теплоотдачи</title>
+    <script src="code1.js"></script>
+	<script src="mathutils.js"></script>
+	<link rel="stylesheet" href="pstyles.css">
+		
+</head>
+
+<body bgcolor="#406025" onload="onInit()">
+
+    <h2>
+        ЛАБОРАТОРНАЯ РАБОТА.
+    </h2>
+    <h2>
+        Исследование теплоотдачи
+        при естественной конвекции около вертикального
+        цилиндра в атмосфере различных газов методом
+        имитационного моделирования процесса теплообмена
+    </h2>
+    <h3>СибГУ им. М. Ф. Решетнева, 2024</h3>
+    <h4>Version 1.20250416</h4>
+    <p  class="licinfa">
+СВИДЕТЕЛЬСТВО
+о государственной регистрации программы для ЭВМ № 2026610992<br/>
+Комплекс имитационных лабораторных работ по
+дисциплине «Теплопередача в РКТ»
+Правообладатель: Федеральное государственное бюджетное
+образовательное учреждение высшего образования
+«Сибирский государственный университет науки и
+технологий имени академика М.Ф. Решетнева» (RU)
+Авторы: Жуйков Дмитрий Александрович (RU), Черненко
+Валентина Викторовна (RU)
+Заявка № 2026610322
+Дата поступления 16 января 2026 г.
+Дата государственной регистрации
+в Реестре программ для ЭВМ 16 января 2026 г.
+ </p>
+
+    <P>
+        <b>Цель работы:</b>  экспериментально определить локальный коэффициент теплоотдачи при естественной конвекции вдоль вертикальной
+        поверхности в атмосфере различных газов методом имитационного моделирования процесса теплообмена.
+    </P>
+
+    <P>
+        Исходные данные:
+    </P>
+
+    <table>
+        <tr>
+            <td>
+                Рабочая жидкость:
+            </td>
+            <td>
+                <SELECT ID="selectorTypeFlow">
+
+                    <option value="0" selected=selected> В О З Д У Х </option>
+                    <option value="1"> В О Д О Р О Д </option>
+                    <option value="2">Д В У О К И С Ь  У Г Л Е Р О Д А</option>
+                    <option value="3">А З О Т</option>
+                </SELECT>
+            </td>
+            <td rowspan="4">
+                <img src="ALL004.png" width="500" />
+            </td>
+            <td rowspan="4">
+                <table>
+                    <tr><td>U_T1</td><td><input id="txtT1" TYPE="text" VALUE="0" readonly style="text-align:right;" size="4" /></td></tr>
+                    <tr><td>U_T2</td><td><input id="txtT2" TYPE="text" VALUE="0" readonly style="text-align:right;" size="4" /></td></tr>
+                    <tr><td>U_T3</td><td><input id="txtT3" TYPE="text" VALUE="0" readonly style="text-align:right;" size="4" /></td></tr>
+                    <tr><td>U_T4</td><td><input id="txtT4" TYPE="text" VALUE="0" readonly style="text-align:right;" size="4" /></td></tr>
+                    <tr><td>U_T5</td><td><input id="txtT5" TYPE="text" VALUE="0" readonly style="text-align:right;" size="4" /></td></tr>
+                    <tr><td>U_T6</td><td><input id="txtT6" TYPE="text" VALUE="0" readonly style="text-align:right;" size="4" /></td></tr>
+                    <tr><td>U_T7</td><td><input id="txtT7" TYPE="text" VALUE="0" readonly style="text-align:right;" size="4" /></td></tr>
+                    <tr><td>U_T8</td><td><input id="txtT8" TYPE="text" VALUE="0" readonly style="text-align:right;" size="4" /></td></tr>
+                    <tr><td>U_T9</td><td><input id="txtT9" TYPE="text" VALUE="0" readonly style="text-align:right;" size="4" /></td></tr>
+                    <tr><td>U_T10</td><td><input id="txtT10" TYPE="text" VALUE="0" readonly style="text-align:right;" size="4" /></td></tr>
+                </table>
+            </td>
+
+        </tr>
+        <tr>
+            <td>
+                Реостат, %:
+            </td>
+            <td>
+                <input id="slider_P_g" TYPE="range" VALUE="20" max="100" min="0" oninput="oninputslider_P_g()" />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Напряжение, мВ:
+            </td>
+            <td>
+                <input id="txtP_g" TYPE="text" VALUE="2" readonly=readonly />
+            </td>
+        </tr>
+
+        <tr>
+            <td>
+                <input TYPE="button" VALUE="Новый эксперимент" width="300" height="200" ONCLICK="New()" />
+                <!--<a class="c-btn" rel=" noopener" ONCLICK="New()"><span>Новый эксперимент</span></a>-->
+            </td>
+            <td>
+                <input TYPE="button" VALUE="ЗАМЕР" width="300" height="200" ONCLICK="Register()" />
+            </td>
+        </tr>
+    </table>
+
+    <hr />
+    <p>
+
+    </p>
+    <P>
+        Результаты замеров для режима:<div id="idInfo"></div>
+    </P>
+    <hr />
+    <div id="id0">Результат:</div>
+</body>
+
+</html>
