@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+  <meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+  <meta content="ru-ru" http-equiv="Content-Language" />
+  <meta name="viewport" content="witdh=device-width, initial-scale=1.0">
+  <title>Исследование теплоотдачи</title>
+    <script src="code1.js"></script>
+	<script src="mathutils.js"></script>
+	<link rel="stylesheet" href="pstyles.css">
+		
+</head>
+
+<body bgcolor="#406025" onload="onInit()">
+
+    <h2>
+        ЛАБОРАТОРНАЯ РАБОТА.
+    </h2>
+    <h2>
+        Исследование теплоотдачи горизонтальной трубы при свободном движении воздуха
+        методом имитационного моделирования процесса теплообмена
+    </h2>
+    <h3>СибГУ им. М. Ф. Решетнева, 2026</h3>
+    <h4>Version 1.20260327</h4>
+    <p class="licinfa">
+        СВИДЕТЕЛЬСТВО
+        о государственной регистрации программы для ЭВМ № 2026610992<br />
+        Комплекс имитационных лабораторных работ по
+        дисциплине «Теплопередача в РКТ»
+        Правообладатель: Федеральное государственное бюджетное
+        образовательное учреждение высшего образования
+        «Сибирский государственный университет науки и
+        технологий имени академика М.Ф. Решетнева» (RU)
+        Авторы: Жуйков Дмитрий Александрович (RU), Черненко
+        Валентина Викторовна (RU)
+        Заявка № 2026610322
+        Дата поступления 16 января 2026 г.
+        Дата государственной регистрации
+        в Реестре программ для ЭВМ 16 января 2026 г.
+    </p>
+
+    <P>
+        <b>Цель работы:</b>  углубление знаний по теории теплоотдачи при свободном движении жидкости – естественной конвекции, ознакомление с методикой опытного исследования процесса и получение навыков в проведении эксперимента.
+    </P>
+
+    <P>
+        Исходные данные:
+    </P>
+
+    <table>
+        <tr>
+            <td>
+                Рабочая жидкость:
+            </td>
+            <td>
+                В О З Д У Х
+            </td>
+
+            <td rowspan="4">
+                <img src="image-schema.PNG" width="500" />
+            </td>
+            <td rowspan="4">
+                <table>
+                    <tr><td>U_T1</td><td><input id="txtT1" TYPE="text" VALUE="0" readonly=readonly style="text-align:right;" size="4" /></td></tr>
+                    <tr><td>U_T2</td><td><input id="txtT2" TYPE="text" VALUE="0" readonly=readonly style="text-align:right;" size="4" /></td></tr>
+                    <tr><td>U_T3</td><td><input id="txtT3" TYPE="text" VALUE="0" readonly=readonly style="text-align:right;" size="4" /></td></tr>
+                    <tr><td>U_T4</td><td><input id="txtT4" TYPE="text" VALUE="0" readonly=readonly style="text-align:right;" size="4" /></td></tr>
+                    <tr><td>U_T5</td><td><input id="txtT5" TYPE="text" VALUE="0" readonly=readonly style="text-align:right;" size="4" /></td></tr>
+                    <tr><td>U_T6</td><td><input id="txtT6" TYPE="text" VALUE="0" readonly=readonly style="text-align:right;" size="4" /></td></tr>
+                </table>
+            </td>
+
+        </tr>
+        <tr>
+            <td>
+                Диаметр трубы, мм:
+            </td>
+            <td>
+                <input id="txt_D" TYPE="text" VALUE="60" />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Длина трубы, мм:
+            </td>
+            <td>
+                <input id="txt_L" TYPE="text" VALUE="1540" />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Реостат, %:
+            </td>
+            <td>
+                <input id="slider_P_g" TYPE="range" VALUE="300" max="400" min="100" oninput="oninputslider_P_g()" />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Мощность электронагревателя, В:
+            </td>
+            <td>
+                <input id="txtP_g" TYPE="text" VALUE="0" readonly=readonly />
+            </td>
+        </tr>
+
+        <tr>
+            <td>
+                <input TYPE="button" VALUE="Новый эксперимент" width="300" height="200" ONCLICK="New()" />
+                <!--<a class="c-btn" rel=" noopener" ONCLICK="New()"><span>Новый эксперимент</span></a>-->
+            </td>
+            <td>
+                <input id="iddoclick"  TYPE="button" VALUE="ЗАМЕР" width="300"  height="200" ONCLICK="Register()"  />
+            </td>
+        </tr>
+    </table>
+
+    <hr />
+    <div id="idERROOR" class="error"></div>
+    
+    <P>
+        Результаты замеров для режима:<div id="idInfo"></div>
+    </P>
+    <hr />
+    <div id="id0">Результат:</div>
+
+</body>
+
+</html>
