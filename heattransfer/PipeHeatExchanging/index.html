@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+    <meta content="ru-ru" http-equiv="Content-Language" />
+    <meta name="viewport" content="witdh=device-width, initial-scale=1.0" />
+    <title>PipeHeatExchanging</title>
+    <script src="codecore.js"></script>
+    <script src="mathutils.js"></script>
+    <link rel="stylesheet" href="pstyles.css" />
+    <link rel="stylesheet" href="styles.css" />
+    <!--copyright, www.sibsau.ru, d_zhuikov@sibsau.ru, 2024-->
+
+</head>
+
+<body bgcolor="#406025" onload="onInit()">
+    <h2>
+        ЛАБОРАТОРНАЯ РАБОТА.
+    </h2>
+    <h2>
+        ИССЛЕДОВАНИЕ ТЕПЛООТДАЧИ
+        ПРИ ВЫНУЖДЕННОМ ДВИЖЕНИИ ВОЗДУХА В ТРУБЕ МЕТОДОМ
+        ИМИТАЦИОННОГО МОДЕЛИРОВАНИЯ ПРОЦЕССА ТЕПЛООБМЕНА
+    </h2>
+    <h3>СибГУ им. М. Ф. Решетнева, 2025</h3>
+    <h4>Version 1.20250306</h4>
+    <p class="licinfa">
+СВИДЕТЕЛЬСТВО
+о государственной регистрации программы для ЭВМ № 2026610992<br/>
+Комплекс имитационных лабораторных работ по
+дисциплине «Теплопередача в РКТ»
+Правообладатель: Федеральное государственное бюджетное
+образовательное учреждение высшего образования
+«Сибирский государственный университет науки и
+технологий имени академика М.Ф. Решетнева» (RU)
+Авторы: Жуйков Дмитрий Александрович (RU), Черненко
+Валентина Викторовна (RU)
+Заявка № 2026610322
+Дата поступления 16 января 2026 г.
+Дата государственной регистрации
+в Реестре программ для ЭВМ 16 января 2026 г.
+ </p>
+
+    <P>
+        <b>Цель работы:</b>  экспериментально определить локальные и средние по длине трубы значения коэффициента теплоотдачи при вынужденном движении воздуха в трубе при разных скоростях движения и сопоставить результаты опытов с известными критериальными зависимостями.
+    </P>
+
+    <P>
+        Исходные данные:
+    </P>
+
+    <table>
+        <tr>
+            <td>
+                Атмосферное давление, Pb, мм.рт.ст:
+            </td>
+            <td>
+                <input id="editbox_Pb" name="editbox_Pb" TYPE="text" VALUE="760" />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Температура воздуха на входе в трубу, t.f1, С:
+            </td>
+            <td>
+                <input id="editbox_t11" name="editbox_t11" TYPE="text" VALUE="25" />
+            </td>
+        </tr>
+
+        <tr>
+            <td>
+                Диаметр трубы внутренний, D1, мм:
+            </td>
+            <td>
+                <input id="editbox_D1" name="editbox_D1" TYPE="text" VALUE="8.5" />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Длина трубы, L, мм:
+            </td>
+            <td>
+                <input id="editbox_L" name="editbox_L" TYPE="text" VALUE="720" />
+            </td>
+        </tr>
+
+        <tr style="margin-bottom:200px">
+            <td>
+                <input TYPE="button"  class="button1" VALUE="Новый эксперимент" ONCLICK="New()" style="width:200px;height:50px" />
+            </td>
+            <td>
+                <input id="bttnGetValues"  class="button1" name="bttnGetValues" hidden=hidden TYPE="button" VALUE="ЗАМЕР" ONCLICK="Register()" style="width:200px;height:50px" />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Реостат насоса, %:
+                <input id="editbox_dH" name="editbox_dH" TYPE="text" VALUE="" readonly=readonly />
+            </td>
+            <td>
+                <input id="slider_H" TYPE="range" VALUE="20" max="100" min="0" oninput="oninputslider_H()" />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Реостат элетронагревателя, %:
+                <input id="editbox_U" name="editbox_U" TYPE="text" VALUE="" readonly=readonly />
+            </td>
+            <td>
+                <input id="slider_U" TYPE="range" VALUE="20" max="100" min="0" oninput="oninputslider_U()" />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <img src="image.png" width="600" />
+            </td>
+            <td>
+                <p> Текущие параметры аппарата</p>
+                <table>
+                    <tr><td>U</td><td><input id="V_U" TYPE="text" VALUE="0" readonly=readonly style="text-align:right;" size="4" /></td></tr>
+                    <tr><td>dPg</td><td><input id="V_dPg" TYPE="text" VALUE="0" readonly=readonly style="text-align:right;" size="4" /></td></tr>
+                    <tr><td>dH</td><td><input id="V_dH" TYPE="text" VALUE="0" readonly=readonly style="text-align:right;" size="4" /></td></tr>
+                    <tr><td>T01</td><td><input id="T01" TYPE="text" VALUE="0" readonly=readonly style="text-align:right;" size="4" /></td></tr>
+                    <tr><td>T02</td><td><input id="T02" TYPE="text" VALUE="0" readonly=readonly style="text-align:right;" size="4" /></td></tr>
+                    <tr><td>T03</td><td><input id="T03" TYPE="text" VALUE="0" readonly=readonly style="text-align:right;" size="4" /></td></tr>
+                    <tr><td>T04</td><td><input id="T04" TYPE="text" VALUE="0" readonly=readonly style="text-align:right;" size="4" /></td></tr>
+                    <tr><td>T05</td><td><input id="T05" TYPE="text" VALUE="0" readonly=readonly style="text-align:right;" size="4" /></td></tr>
+                    <tr><td>T06</td><td><input id="T06" TYPE="text" VALUE="0" readonly=readonly style="text-align:right;" size="4" /></td></tr>
+                    <tr><td>T07</td><td><input id="T07" TYPE="text" VALUE="0" readonly=readonly style="text-align:right;" size="4" /></td></tr>
+                    <tr><td>T08</td><td><input id="T08" TYPE="text" VALUE="0" readonly=readonly style="text-align:right;" size="4" /></td></tr>
+                    <tr><td>T09</td><td><input id="T09" TYPE="text" VALUE="0" readonly=readonly style="text-align:right;" size="4" /></td></tr>
+                    <tr><td>T10</td><td><input id="T10" TYPE="text" VALUE="0" readonly=readonly style="text-align:right;" size="4" /></td></tr>
+                    <tr><td>T11</td><td><input id="T11" TYPE="text" VALUE="0" readonly=readonly style="text-align:right;" size="4" /></td></tr>
+                    <tr><td>T12</td><td><input id="T12" TYPE="text" VALUE="0" readonly=readonly style="text-align:right;" size="4" /></td></tr>
+                </table>
+            </td>
+        </tr>
+
+    </table>
+
+    <hr />
+    <p>
+
+    </p>
+    <P>
+        <b>Результаты замеров для режима:</b>
+        <div id="idInfo"></div>
+    </P>
+    <hr />
+    <div id="id0">Результат:</div>
+</body>
+
+</html>
