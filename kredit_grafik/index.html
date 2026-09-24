@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Аннуитетный кредитный калькулятор</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 0 20px;
+            color: #333;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .results {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 4px;
+            border-left: 5px solid #007BFF;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Расчет аннуитетного кредита</h2>
+    
+    <div class="form-group">
+        <label for="amount">Сумма кредита (руб.):</label>
+        <input type="number" id="amount" value="100000" min="1">
+    </div>
+    
+    <div class="form-group">
+        <label for="rate">Годовая процентная ставка (%):</label>
+        <input type="number" id="rate" value="12" step="0.1" min="0.1">
+    </div>
+    
+    <div class="form-group">
+        <label for="term">Срок кредита (в месяцах):</label>
+        <input type="number" id="term" value="12" min="1">
+    </div>
+    
+    <button onclick="calculateCredit()">Рассчитать</button>
+
+    <div id="summary" class="results" style="display:none;">
+        <h3>Итоги расчета:</h3>
+        <p>Ежемесячный платеж: <strong id="resMonthlyPayment">0</strong> руб.</p>
+        <p>Общая сумма выплат: <strong id="resTotalPayment">0</strong> руб.</p>
+        <p>Переплата по кредиту: <strong id="resOverpayment">0</strong> руб.</p>
+    </div>
+
+    <table id="scheduleTable" style="display:none;">
+        <thead>
+            <tr>
+                <th>№ платежа</th>
+                <th>Сумма платежа (руб.)</th>
+                <th>Платеж по процентам (руб.)</th>
+                <th>Платеж по основному долгу (руб.)</th>
+                <th>Остаток долга (руб.)</th>
+            </tr>
+        </thead>
+        <tbody id="scheduleBody">
+            <!-- Строки графика будут добавляться сюда динамически -->
+        </tbody>
+    </table>
+
+    <script>
+        function calculateCredit() {
+            // 1. Получаем значения из полей ввода
+            const amount = parseFloat(document.getElementById('amount').value);
+            const annualRate = parseFloat(document.getElementById('rate').value);
+            const termMonths = parseInt(document.getElementById('term').value);
+
+            // Проверка корректности ввода
+            if (isNaN(amount) || isNaN(annualRate) || isNaN(termMonths) || amount <= 0 || annualRate <= 0 || termMonths <= 0) {
+                alert("Пожалуйста, заполните все поля корректными положительными числами.");
+                return;
+            }
+
+            // 2. Формула аннуитетного платежа
+            // Месячная процентная ставка (в долях)
+            const monthlyRate = (annualRate / 12) / 100; 
+            
+            // Коэффициент аннуитета: (i * (1 + i)^n) / ((1 + i)^n - 1)
+            const x = Math.pow(1 + monthlyRate, termMonths);
+            const monthlyPayment = amount * (monthlyRate * x) / (x - 1);
+
+            // Итоговые показатели
+            const totalPayment = monthlyPayment * termMonths;
+            const overpayment = totalPayment - amount;
+
+            // 3. Вывод итогов на экран (округляем до 2 знаков после запятой)
+            document.getElementById('resMonthlyPayment').innerText = monthlyPayment.toFixed(2);
+            document.getElementById('resTotalPayment').innerText = totalPayment.toFixed(2);
+            document.getElementById('resOverpayment').innerText = overpayment.toFixed(2);
+            document.getElementById('summary').style.display = 'block';
+
+            // 4. Построение графика платежей
+            const scheduleBody = document.getElementById('scheduleBody');
+            scheduleBody.innerHTML = ''; // Очищаем таблицу от старых данных
+            
+            let remainingDebt = amount;
+
+            for (let month = 1; month <= termMonths; month++) {
+                // Начислено процентов за месяц
+                const interestPayment = remainingDebt * monthlyRate;
+                
+                // Часть платежа, идущая на погашение основного долга
+                let principalPayment = monthlyPayment - interestPayment;
+
+                // Для последнего месяца корректируем копейки из-за погрешностей округления
+                if (month === termMonths) {
+                    principalPayment = remainingDebt;
+                }
+
+                // Корректируем остаток долга
+                remainingDebt -= principalPayment;
+                if (remainingDebt < 0) remainingDebt = 0;
+
+                // Создаем строку таблицы
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${month}</td>
+                    <td>${(principalPayment + interestPayment).toFixed(2)}</td>
+                    <td>${interestPayment.toFixed(2)}</td>
+                    <td>${principalPayment.toFixed(2)}</td>
+                    <td>${remainingDebt.toFixed(2)}</td>
+                `;
+                scheduleBody.appendChild(row);
+            }
+
+            // Показываем таблицу
+            document.getElementById('scheduleTable').style.display = 'table';
+        }
+    </script>
+</body>
+</html>
+
