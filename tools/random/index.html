@@ -1,10 +1,12 @@
-<!DOCTYPE html>
-<html lang="en-us">
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <meta content="text/html; charset=windows-1251" http-equiv="Content-Type" />
+    <meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
     <meta content="en-us" http-equiv="Content-Language" />
-    <title>Random</title>
     <meta name="viewport" content="witdh=device-width, initial-scale=1.5">
+
+    <title>Random numbers list</title>
 
     <style>
         body {
@@ -88,7 +90,7 @@
             AddPrf("calc!");
             var rows = [];
             for (i = 0; i < size; i++) {
-                rows[i] = MkRow([MkTag("p", (i + 1)), "Question �" + x[i], " <input type=\"checkbox\" />"]);
+                rows[i] = MkRow([MkTag("p", (i + 1)), "Question #" + x[i], " <input type=\"checkbox\" />"]);
             }
             //AddPrf(rows);
 
@@ -165,15 +167,16 @@
 
 
 
-    <h4 id="rndiv">Random number </h4>
-    <h5>v.20250827</h5>
+    <h4 id="rndiv">Random numbers list </h4>
+    <h4 id="rndiv">Генератор списка случайных чисел </h4>
+    <h5>v.20260924</h5>
     <hr />
     <table>
         <tr>
             <td colspan="2">
                 <INPUT TYPE="text" SIZE=20 id="txtArraySize" value="25">
-                <input TYPE="button" VALUE="����" ONCLICK="Start()">
-                <input TYPE="button" VALUE="��������" ONCLICK="ClearReport()">
+                <input TYPE="button" VALUE="RUN" ONCLICK="Start()">
+                <input TYPE="button" VALUE="Clear" ONCLICK="ClearReport()">
 
             </td>
         </tr>
