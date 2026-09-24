@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+    <meta content="en-us" http-equiv="Content-Language" />
+    <title> Расчет ветрогенератора </title>
+
+</head>
+<body bgcolor="ccaa00">
+ <h2>Расчет горизонтального ветрогенератора</h2>
+
+ <P><font size="4">
+ Введите исходные данные:
+</font></P> 
+
+<table border=1 BORDERCOLOR="RED">
+<tr>
+<td>
+ Скорость:</td><td>
+<input  id="txtSpeed" TYPE="text" VALUE="4"> 
+</td></tr>
+ <tr><td> 
+Температура: </td><td> <input  id="txtT" TYPE="text" VALUE="20"> 
+ </td></tr> 
+ <tr><td> 
+Диаметр 1: </td><td> <input  id="txtD1" TYPE="text" VALUE="0.80"> 
+ </td></tr> 
+ <tr><td> 
+Диаметр 2: </td><td> <input  id="txtD2" TYPE="text" VALUE="6.0"> 
+ </td></tr> 
+ <tr><td> 
+КПД ветротурбины(0.3-0.45): </td><td> <input  id="txtEFt" TYPE="text" VALUE="0.35"> 
+ </td></tr> 
+ <tr><td> 
+КПД электрогенератора: </td><td> <input  id="txtEFe" TYPE="text" VALUE="0.80"> 
+ </td></tr> 
+ <tr><td> 
+Глубина разряда АКБ 200 А*ч в день, %: </td><td> <input  id="txtDegree" TYPE="text" VALUE="50"> 
+ </td></tr> 
+ <tr><td> 
+Цена одного АКБ 200 А*ч, руб: </td><td> <input  id="txtAB" TYPE="text" VALUE="14000"> 
+ </td></tr> 
+ <tr><td> 
+Цена материалов, руб: </td><td> <input  id="txtSumm" TYPE="text" VALUE="150000"> 
+ </td></tr>
+ <tr><td> 
+Цена за 1кВт*ч, руб: </td><td> <input  id="txtPowPrice" TYPE="text" VALUE ="2.5"> 
+ </td></tr> 
+</table> 
+<input TYPE="button" VALUE="Рассчитать" ONCLICK="Start()">
+ <hr/>
+ <div id="id0" >Результат:</div> 
+<script type="text/javascript">
+function Start()
+{
+ ClearReport();
+ 
+    var R = 287; // газ.постоянная воздуха 
+
+    var U = parseFloat( txtSpeed.value);
+    var d1 = parseFloat( txtD1.value); 
+    var d2 = parseFloat( txtD2.value);
+    var EFt = parseFloat( txtEFt.value); 
+    var EFe = parseFloat( txtEFe.value); 
+    var T = 273 + parseFloat( txtT.value); 
+    var ro = 101325/(R*T)  ;// кг/кб.м
+ 
+    var powPrice = parseFloat(txtPowPrice.value); 
+    var materialSumm = parseFloat(txtSumm.value); 
+    var btrDegree = 0.01 * parseFloat( txtDegree.value);  
+    var btrPrice = parseFloat( txtAB.value);  
+
+    SetTxt("T = " + T + " K") ;
+    var F = Math.PI* (d2*d2 - d1*d1)/4;
+    SetTxt("F = " + F + " кв.м") ; 
+
+    var N = F * U * U * U* ro  / 2 ;
+    N = N * EFt * EFe;
+var txtN = "Полезная электромощность: " ;
+if(N > 1000)
+ txtN = txtN + N /1000 + " кВт" ;
+else
+ txtN = txtN + N + " Вт" ; 
+ SetTxt(txtN ) ; 
+
+var p2m = N * 24 * 30/1000;
+ SetTxt("В месяц: " + p2m + " кВт*ч"  ) ; 
+var s2m = p2m * powPrice;
+ SetTxt("Экономия в месяц: " + s2m + " руб"  ) ; 
+
+var U = 12.0; //Вольт
+var I = 200; // Ампер*час
+var Days = 30; // Частота перезарядки в месяц
+
+var nBtrs = p2m * 1000/(U* I * Days* btrDegree );
+ SetTxt("Кол-во АКБ : " + nBtrs + " шт"  ) ; 
+
+var btrsSumm =  btrPrice*  nBtrs;
+ SetTxt("Затраты на АКБ : " + btrsSumm + " руб"  ) ; 
+
+var totalSumm = materialSumm +  btrsSumm; 
+var moneyBack = totalSumm/( s2m * 12);
+ SetTxt("Окупаемость : " + moneyBack + " лет"  ) ; 
+}
+ function SetTxt(txt) 
+{
+ AddReport( MkTag("p", txt) ) ;
+}
+ function AddReport(html)
+{
+ var x=document.getElementById("id0");
+x.innerHTML= x.innerHTML + html;
+}
+ function ClearReport()
+{
+ var x=document.getElementById("id0");
+x.innerHTML= "";
+} 
+function MkTag(tag, text)
+{
+ var ret= "<"+tag+">"+text+"</"+tag+">";
+return ret;
+} 
+</script>
+</body>
+</html>

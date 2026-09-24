@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<!--<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">-->
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+    <meta content="en-us" http-equiv="Content-Language" />
+    <meta name="viewport" content="witdh=device-width, initial-scale=1.0">
+    <meta content="images/standard_color_128dp.png" itemprop="image" />
+
+    <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
+    <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="images/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="images/logo_dla.png">
+
+    <title> Calculator of turbomachine elements </title>
+    <link id="theme" rel="stylesheet" type="text/css" href="pstyles.css">
+    <script src="plotly-latest.min.js"></script>
+    <!--<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>-->
+
+    <script src="FileSaver.js"></script>
+    <script src="util.js"></script>
+    <script src="Factory.js"></script>
+    <script src="SlotData.js"></script>
+    <script src="SlotInput.js"></script>
+    <script src="BoundryLayer.js"></script>
+    <script src="Slot.js"></script>
+    <script src="RotationChamberData.js"></script>
+    <script src="RotationSlotInput.js"></script>
+    <script src="RotationSlotOutput.js"></script>
+    <script src="RotationSlotCoreCalc.js"></script>
+    <script src="TurbinDisk.js"></script>
+    <script src="VortexChamber.js"></script>
+    <script src="hdxcode.js"></script>
+</head>
+<body onload="onLoadPage()">
+
+    <h1>Расчеты гидрогазодинамических элементов/каналов/трактов агрегатов турбомашин</h1>
+
+    <h4>Версия 1.20260119</h4>
+    <table class="menu">
+        <tr>
+            <td>
+                <img src="images/logo_dla.png" width="80" style="background-color: white" />
+            </td>
+            <td>
+                <label>MENU</label>
+            </td>
+
+            <td>
+                <label for="SelectorObjectToStudy">ОБЪЕКТ РАСЧЕТА</label>
+                <select id="idSelectorObjectToStudy" name="SelectorObjectToStudy" onchange="OnChangeSelectorObjectToStudy()"></select>
+                <input TYPE="button" VALUE="Заново" ONCLICK="NewClearAll()" />
+            </td>
+
+            <td>
+                <input TYPE="button" VALUE="+Новый" ONCLICK="NewAddSlot()" />
+            </td>
+            <td>
+                <label for="myfile">Открыть...</label>
+                <input type="file" id="myfile" name="myfile" accept=".json" onchange="OpenToFile()">
+            </td>
+            <td>
+                <input id="idinputSavefile" TYPE="button" VALUE="Сохранить..." ONCLICK="SaveToFile()" />
+            </td>
+            <td>
+                <input id="idinputresetcalc" TYPE="button" VALUE="Поумолчанию" ONCLICK="ResetInputData()" />
+            </td>
+            <td>
+                <input id="idinputdocalc" TYPE="button" VALUE="Рассчитать" ONCLICK="Start()" />
+            </td>
+            <td>
+                <input id="idinputexport" TYPE="button" VALUE="Экспорт результатов..." ONCLICK="ExportToFile()" />
+            </td>
+            <td>
+                <input TYPE="button" VALUE="Theme" ONCLICK="SwitchTheme()" />
+            </td>
+        </tr>
+        <!-- <tr>
+            <td>
+            </td>
+            <td>
+                <label>Приращение при добавлении</label>
+            </td>
+            <td>
+                <select id="idSelectorTrendIncreaseParam" name="SelectorTrendIncreaseParam"></select>
+            </td>
+            <td>
+                <label>Приращения величина, %:</label>
+            </td>
+            <td colspan="3">
+                <input id="idTrendIncreaseParamStep" TYPE="text" VALUE="10" />
+            </td>
+        </tr> -->
+    </table>
+    <div id="idERROOR" class="error"></div>
+
+    <h3>Исходные данные</h3>
+    <div id="idlist">Input list load error!</div>
+    <hr />
+
+    <h3>Выходные данные - Результат расчета</h3>
+    <input TYPE="button" VALUE="Копировать Выходные и входные данные в Excel" ONCLICK="ExportToCliboard()" />
+    <div id="id0" class="comment">Результат:</div>
+    <hr />
+
+    <div id="idResultTable">Таблица расчетов... </div>
+
+    <h3>ГРАФИКИ</h3>
+    <table>
+        <tr>
+            <td width="10%">
+                <label for="SelectorTrendGraffX">Параметр по оси X:</label>
+                <select id="idSelectorTrendGraffX" name="SelectorTrendGraffX" onchange="PreparePlottingLines()"></select>
+                <input TYPE="button" VALUE="Обновить" ONCLICK="UpdatePlottingLines()" />
+                <div id="idlinessetup">list lines settings</div>
+            </td>
+            <td valign="top">
+                <h3>Характеристики</h3>
+                <div id="myDiv" width="800" height="450"></div>
+            </td>
+        </tr>
+        <tr>
+            <td width="10%">
+                <table>
+                    <tr>
+                        <td>
+                            <label for="SelectorSlotGraffX">Параметр по оси X:</label>
+                            <select id="idSelectorSlotGraffX" name="SelectorSlotGraffX"></select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label for="txtScaleSlotGraffX">Масштаб коэф по оси X:</label>
+                            <input TYPE="text" VALUE="1" id="idScaleSlotGraffX" name="txtScaleSlotGraffX" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label for="SelectorSlotGraffY">Параметр по оси Y:</label>
+                            <select id="idSelectorSlotGraffY" name="SelectorSlotGraffY"></select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label for="txtScaleSlotGraffY">Масштаб коэф по оси Y:</label>
+                            <input TYPE="text" VALUE="1" id="idScaleSlotGraffY" name="txtScaleSlotGraffY" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input TYPE="button" VALUE="Add" ONCLICK="AddPlottingDetailLines()" />
+                            <input TYPE="button" VALUE="Обновить" ONCLICK="UpdatePlottingDetailLines()" />
+                            <input TYPE="button" VALUE="Очистить" ONCLICK="ClearPlottingDetailLines()" />
+                        </td>
+                    </tr>
+                </table>
+                <div id="idListSlotGraff">list lines </div>
+            </td>
+            <td valign="top">
+                <h3>Зависимости в полости</h3>
+                <div id="myDiv2" width="800" height="450"></div>
+            </td>
+        </tr>
+    </table>
+
+    <hr />
+    <h3>Детализация</h3>
+    <label for="SelectorTrend">Выбери Элемент:</label>
+    <select id="idSelectorTrend" name="SelectorTrend" onchange="SelectorTrendChanged()"></select>
+    <input TYPE="button" VALUE="Показать" ONCLICK="ShowSlotDetaisOnOtherWindow()" />
+    <hr />
+    <div id="idResultDetailsTable">... </div>
+    <div id="idlinessetupCoreData">list lines settings</div>
+
+</body>
+</html>
